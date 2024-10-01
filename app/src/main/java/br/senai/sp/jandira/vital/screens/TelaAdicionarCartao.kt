@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.vital.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,12 +20,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -39,25 +35,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 
-
 @Composable
-fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
-
-    var novasenhaState = remember {
-        mutableStateOf("")
-    }
-
-    var erroState = remember {
-        mutableStateOf(false)
-    }
-
-    var mensagemErroState = remember {
-        mutableStateOf("")
-    }
-
+fun TelaAdicionarCartao(controleDeNavegacao: NavHostController) {
 
     VitalTheme {
-
         Surface {
             Box(
                 modifier = Modifier
@@ -66,8 +47,7 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
                         shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
                     )
                     .fillMaxWidth()
-                    .height(150.dp)
-                    .padding(top = 50.dp)
+                    .height(100.dp)
             ){
 
                 Icon(
@@ -79,10 +59,10 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
                         .padding(start = 16.dp) // Adiciona um espaçamento à esquerda
                 )
                 Text(
-                    "Alterar Senha",
+                    "Adicionar Cartão",
                     color = Color.White,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .align(Alignment.Center) // Centraliza no meio
                 )
@@ -93,30 +73,20 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxSize()
-                    .padding(top = 200.dp)
-                ,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
                 OutlinedTextField(
                     value = "",
                     onValueChange = {
-                        novasenhaState.value = it
+//                        novasenhaState.value = it
                     },
+//                    isError = erroState.value,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                    ,
-                    isError = erroState.value,
-                    label = {
-                        Text(
-                            text = "Nova Senha",
-                            fontSize = 13.sp
-                        )
-                    },
+                        .padding(30.dp)
+                        .padding(top = 160.dp),
+
                     shape = RoundedCornerShape(26.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF2954C7),
@@ -130,13 +100,9 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
                 OutlinedTextField(
                     value = "",
                     onValueChange = {
-                        novasenhaState.value = it
+//                        novasenhaState.value = it
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                    ,
-                    isError = erroState.value,
+//                    isError = erroState.value,
                     label = {
                         Text(
                             text = "Confirmar Nova Senha",
@@ -160,9 +126,10 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 60.dp),
+                        .padding(16.dp),
                     verticalArrangement = Arrangement.Bottom // Posiciona os elementos no final da tela
                 ) {
+                    Spacer(modifier = Modifier.weight(1f)) // Um espaço vazio que empurra o botão para baixo
 
                     Button(
                         onClick = { /* TODO */ },
@@ -181,11 +148,7 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
                         ),
                         contentPadding = PaddingValues() // Remove o padding padrão para o gradiente preencher todo o botão
                     ) {
-                        Text(
-                            text = "SALVAR",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text(text = "SALVAR")
                     }
                 }
 
@@ -201,18 +164,16 @@ fun TelaAlterarSenha(controleDeNavegacao: NavHostController) {
 
 
 
-@Preview (showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun TelaAlterarSenhaPreview () {
+fun TelaAdicionarCartaoPreview () {
 
 
     // Pre-visualizacao
     VitalTheme {
-        TelaAlterarSenha(controleDeNavegacao = NavHostController(LocalContext.current))
+        TelaAdicionarCartao(controleDeNavegacao= NavHostController(LocalContext.current))
     }
 
 
 
-
 }
-

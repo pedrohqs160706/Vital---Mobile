@@ -3,13 +3,23 @@ package br.senai.sp.jandira.vital.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -69,13 +79,25 @@ fun TelaInicial3(controleDeNavegacao: NavHostController) {
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopEnd) // Alinha no topo à direita
-                            .padding(20.dp) // Espaçamento
+
                     ) {
-                        Text(
-                            text = "Pular",
-                            color = Color.Gray,
-                            fontSize = 12.sp,
-                        )
+                        Button(
+                            onClick = {
+                                controleDeNavegacao.navigate("telaLogin")
+                            },
+                            modifier = Modifier,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent  // Deixa o botão transparente
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(0.dp)  // Remove a elevação (sombra)
+                        ) {
+                            Text(
+                                text = "Pular",
+                                color = Color.Gray,
+                                fontSize = 12.sp
+                            )
+                        }
+
                     }
 
                     // Texto FINAIS
@@ -98,6 +120,53 @@ fun TelaInicial3(controleDeNavegacao: NavHostController) {
                             color = Color.White,
                             textAlign = TextAlign.Center
                         )
+                        Spacer(modifier = Modifier.height(14.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()  // Ocupa a largura total da tela
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween  // Garante que os botões fiquem nos cantos
+                            ) {
+                                // Botão para Voltar (à esquerda)
+                                Button(
+                                    onClick = {
+                                        controleDeNavegacao.navigate("telaInicial2")
+                                    },
+                                    modifier = Modifier,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color.Transparent  // Deixa o botão transparente
+                                    ),
+                                    elevation = ButtonDefaults.buttonElevation(0.dp)  // Remove a elevação (sombra)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.ArrowBack,
+                                        contentDescription = "",
+                                        tint = Color.White  // Cor branca para o ícone
+                                    )
+                                }
+
+                                // Botão para Avançar (à direita)
+                                Button(
+                                    onClick = {
+                                        controleDeNavegacao.navigate("telaLogin")
+                                    },
+                                    modifier = Modifier,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color.Transparent  // Deixa o botão transparente
+                                    ),
+                                    elevation = ButtonDefaults.buttonElevation(0.dp)  // Remove a elevação (sombra)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.ArrowForward,
+                                        contentDescription = "",
+                                        tint = Color.White  // Cor branca para o ícone
+                                    )
+                                }
+                            }
+                        }
 
                     }
                 }

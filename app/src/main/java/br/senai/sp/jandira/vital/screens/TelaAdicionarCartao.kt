@@ -5,18 +5,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -47,7 +52,8 @@ fun TelaAdicionarCartao(controleDeNavegacao: NavHostController) {
                         shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
                     )
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(150.dp)
+                    .padding(top = 50.dp)
             ){
 
                 Icon(
@@ -73,63 +79,125 @@ fun TelaAdicionarCartao(controleDeNavegacao: NavHostController) {
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(top = 200.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {
-//                        novasenhaState.value = it
-                    },
-//                    isError = erroState.value,
-                    modifier = Modifier
-                        .padding(30.dp)
-                        .padding(top = 160.dp),
+                Column {
+                    // Rótulo fixo em cima
+                    Text(
+                        text = "Nome no Cartão",
+                        fontSize = 13.sp,
+                        modifier = Modifier.padding(start = 16.dp, bottom = 4.dp) // Adiciona espaço entre o label e o campo
+                    )
 
-                    shape = RoundedCornerShape(26.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF2954C7),
-                        unfocusedBorderColor = Color(0xFFA09C9C)
-                    ),
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Filled.Lock, contentDescription = "", tint = Color(0xFF2954C7))
-                    }
-                )
-
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {
-//                        novasenhaState.value = it
-                    },
-//                    isError = erroState.value,
-                    label = {
-                        Text(
-                            text = "Confirmar Nova Senha",
-                            fontSize = 13.sp
+                    // Campo de texto com exemplo
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { /* novasenhaState.value = it */ },
+                        placeholder = {
+                            Text(
+                                text = "Nome do Titular",
+                                fontSize = 13.sp,
+                                color = Color.Gray
+                            )
+                        },
+                        modifier = Modifier
+                            .width(300.dp),
+                        shape = RoundedCornerShape(26.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF2954C7),
+                            unfocusedBorderColor = Color(0xFFA09C9C)
                         )
-                    },
-                    shape = RoundedCornerShape(26.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color(0xFF2954C7),
-                        unfocusedBorderColor = Color(0xFFA09C9C)
-                    ),
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Filled.Lock, contentDescription = "", tint = Color(0xFF2954C7))
-                    }
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
 
-                )
+                Column {
+                    // Rótulo fixo em cima
+                    Text(
+                        text = "Número do Cartão",
+                        fontSize = 13.sp,
+                        modifier = Modifier.padding(start = 16.dp, bottom = 4.dp) // Adiciona espaço entre o label e o campo
+                    )
 
+                    // Campo de texto com exemplo
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { /* novasenhaState.value = it */ },
+                        placeholder = {
+                            Text(
+                                text = "1234 5678 9012 3456",  // Exemplo de número de cartão
+                                fontSize = 13.sp,
+                                color = Color.Gray
+                            )
+                        },
+                        modifier = Modifier
+                            .width(300.dp),
+                        shape = RoundedCornerShape(26.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF2954C7),
+                            unfocusedBorderColor = Color(0xFFA09C9C)
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
 
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                    ,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { /* Handle value change */ },
+                        label = {
+                            Text(
+                                text = "Data de expiração",
+                                fontSize = 13.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(26.dp),
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Filled.DateRange, contentDescription = "", tint = Color(0xFFA09C9C))
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF2954C7),
+                            unfocusedBorderColor = Color(0xFFA09C9C)
+                        ),
+                        modifier = Modifier
+                            .width(200.dp)  // Largura fixa
+                            .padding(end = 8.dp)  // Espaço entre os campos
+                    )
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { /* Handle value change */ },
+                        label = {
+                            Text(
+                                text = "CVV",
+                                fontSize = 13.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(26.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color(0xFF2954C7),
+                            unfocusedBorderColor = Color(0xFFA09C9C)
+                        ),
+                        modifier = Modifier
+                            .width(100.dp)  // Largura fixa
+                    )
+                }
 
-//                Botao para Salvar a alteracao
+//                CheckBox
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(bottom = 60.dp),
                     verticalArrangement = Arrangement.Bottom // Posiciona os elementos no final da tela
                 ) {
-                    Spacer(modifier = Modifier.weight(1f)) // Um espaço vazio que empurra o botão para baixo
 
                     Button(
                         onClick = { /* TODO */ },
@@ -148,7 +216,11 @@ fun TelaAdicionarCartao(controleDeNavegacao: NavHostController) {
                         ),
                         contentPadding = PaddingValues() // Remove o padding padrão para o gradiente preencher todo o botão
                     ) {
-                        Text(text = "SALVAR")
+                        Text(
+                            text = "SALVAR",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
 

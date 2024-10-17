@@ -2,7 +2,11 @@ package br.senai.sp.jandira.vital.screens
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -32,9 +37,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import br.senai.sp.jandira.vital.R
 import br.senai.sp.jandira.vital.model.Login
 import br.senai.sp.jandira.vital.model.Usuario
+import br.senai.sp.jandira.vital.model.UsuarioLogin
 import br.senai.sp.jandira.vital.service.RetrofitFactory
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 import retrofit2.Call
@@ -43,11 +50,9 @@ import retrofit2.Response
 
 
 @Composable
-fun TelaLogin() {
+fun TelaLogin(controleDeNavegacao: NavHostController) {
 
     // Criando variaves de estado
-
-
     var emailState = remember {
         mutableStateOf("")
     }
@@ -64,14 +69,15 @@ fun TelaLogin() {
         mutableStateOf("")
     }
 
-//
-//    var contaRepository = ContaRepository(LocalContext.current)
+    var isLoading = remember { mutableStateOf(false) }
+
 
     VitalTheme {
         Column  {
             Surface(
                 modifier = Modifier
-                    .height(300.dp)
+                    .height(250.dp)
+                    .offset(y = -15.dp)
 
             ){
                 // Imagem da onda
@@ -84,36 +90,47 @@ fun TelaLogin() {
 
                 )
 
-                // Imagem da logo
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "",
+                Column  (
                     modifier = Modifier
-                        .width(140.dp)
-                        .height(110.dp)
-                        .offset(x = 130.dp, y = 2.dp)
-                )
+                        .fillMaxSize()
+                    ,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ){
+                    // Imagem da logo
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .width(140.dp)
+                            .height(110.dp)
+                            .padding(top = 0.dp)
+                    )
+                }
+
+
 
 
             }
 
             Column (
                 modifier = Modifier
-                    .padding(26.dp),
+                    .padding(top = 0.dp, start = 26.dp, end = 26.dp, bottom = 26.dp), // Reduzindo o padding superior
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                Spacer(modifier = Modifier.height(80.dp))
+
+
                 Text(
-                    text = "Sign In Now",
+                    text = "Login",
                     fontSize = 28.sp,
                     color = Color(0xFF2954C7)
                 )
 
-//                Spacer(modifier = Modifier.height(16.dp))
-
-
                 // Espaco para inserir o email
                 OutlinedTextField(
-                    value = "",
+                    value = emailState.value,
                     onValueChange = {
                         emailState.value = it
                     },
@@ -134,7 +151,7 @@ fun TelaLogin() {
 
 
                 OutlinedTextField(
-                    value = "",
+                    value = senhaState.value,
                     onValueChange = {
                         senhaState.value = it
                     },
@@ -152,52 +169,67 @@ fun TelaLogin() {
                 )
 
 
-                Column  {
+                Column (
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .padding(top = 110.dp)
+                ) {
                     Button(
                         onClick = {
+                            isLoading.value = true
 
-                          val login = Usuario(
-                              email = emailState.value,
-                              senha = senhaState.value
-                          )
-                            RetrofitFactory().getUserService().loginUsuario(login).enqueue(
-                                object :
-                                Callback<Login> {
-                                override fun onResponse(p0: Call<Login>, res: Response<Login>) {
-                                    Log.i("Response:", res.toString())
+                            val login = Login(email = emailState.value, senha = senhaState.value)
+                            Log.i("USUARIO", login.toString())
+
+                            RetrofitFactory().getUserService().loginUsuario(login).enqueue(object : Callback<UsuarioLogin>{
+                                override fun onResponse(p0: Call<UsuarioLogin>, res: Response<UsuarioLogin>) {
+                                    Log.i("Response:", res.body().toString())
+                                    isLoading.value = false
+                                        var teste = res.body()!!
+                                      Log.i("RESPONSE", teste.toString())
+                                        if (res.body() != null) {
+                                            val usuario = res.body()!!
+                                            controleDeNavegacao.navigate("telaHome/${usuario.nome}")  // Navega para telaHome passando o nome
+                                        } else {
+                                            // Falha no login
+                                            erroLoginState.value = true
+                                            mensagemErroState.value = "Erro: credenciais inválidas."
+                                        }
                                 }
+                                override fun onFailure(p0: Call<UsuarioLogin>, res: Throwable) {
+                                    Log.i("Falhou:", res.toString())
+                                    isLoading.value = false
+                                        erroLoginState.value = true
+                                        mensagemErroState.value = "Erro de conexão: ${res.message}"
+                                }
+                            })
 
-                                    override fun onFailure(p0: Call<Login>, res: Throwable) {
-                                        Log.i("Response:", res.toString())
-                                    }
 
-                                })
                         },
                         modifier = Modifier
                             .height(46.dp)
                             .width(300.dp)
-//                            .offset(x = 20.dp, y = 10.dp)
-                            .height(50.dp),
-
-
-
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2954C7)),
-                        shape = RoundedCornerShape(16.dp)
-                        ) {
-
+                            .height(50.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(Color(0xFF77B8FF), Color(0xFF0133D6))
+                            ),
+                    shape = RoundedCornerShape(30.dp) // Define o formato do botão
+                    ),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent // Para garantir que o gradiente seja visível
+                    ),
+                    contentPadding = PaddingValues() // Remove o padding padrão para o gradiente preencher todo o botão
+                    )
+                         {
                         // Texto dentro do botao
                         Text(
                             text = "ENTRAR",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Black
-
                         )
-                        
                     }
-
-
                 }
-
                 Text(
                     text = "Nao possui uma conta?",
                     fontSize = 16.sp,
@@ -205,10 +237,19 @@ fun TelaLogin() {
 
                 )
 
+                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
                     text = "Cadastre-se Aqui",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal
+                    color = Color(0xFF0436D7),
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .clickable {
+                            if (controleDeNavegacao != null) {
+                                controleDeNavegacao.navigate("telaCadastro")
+                            }
+                        }
 
                 )
 
@@ -228,7 +269,7 @@ fun TelaLoginPreview () {
 
     // Pre-visualizacao
     VitalTheme {
-        TelaLogin()
+//        TelaLogin(controleDeNavegacao)
     }
 
 

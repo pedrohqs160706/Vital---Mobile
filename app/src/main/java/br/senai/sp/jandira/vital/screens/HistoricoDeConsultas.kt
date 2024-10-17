@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import br.senai.sp.jandira.vital.R
-import br.senai.sp.jandira.vital.model.Login
 import br.senai.sp.jandira.vital.model.Usuario
 import br.senai.sp.jandira.vital.service.RetrofitFactory
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme

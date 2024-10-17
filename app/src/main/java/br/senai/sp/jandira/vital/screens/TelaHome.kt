@@ -1,9 +1,8 @@
 package br.senai.sp.jandira.vital.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,17 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -43,19 +41,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.vital.R
-import br.senai.sp.jandira.vital.model.Login
-import br.senai.sp.jandira.vital.model.Usuario
 import br.senai.sp.jandira.vital.repository.CategoriaRepository
 import br.senai.sp.jandira.vital.repository.EspecialidadeRepository
-import br.senai.sp.jandira.vital.service.RetrofitFactory
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 @Composable
-fun TelaHome() {
+fun TelaHome(nomeUsuario: String?) {
 
     // Criando variaves de estado
 
@@ -71,7 +63,7 @@ fun TelaHome() {
 
         Surface (
             modifier = Modifier
-                .height(210.dp)
+                .height(260.dp)
         ) {
             // Fundo
             Image(
@@ -84,25 +76,29 @@ fun TelaHome() {
 
             )
             Column {
-                // Foto de Perfil
-                Image(
-                    // Fazer a foto de perfil vir do back
-                    painter = painterResource(id = R.drawable.perfil),
-                    contentDescription = "Foto de Perfil",
+                Box(
                     modifier = Modifier
-                        .width(50.dp)
-                        .height(50.dp)
-                        .offset(x = 330.dp, y = 13.dp)
-
-                )
+                        .fillMaxWidth()
+                        .statusBarsPadding()  // Adiciona padding para evitar a sobreposição com a barra de status
+                        .padding(16.dp)  // Padding interno opcional
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.perfil),
+                        contentDescription = "Foto de Perfil",
+                        modifier = Modifier
+                            .size(50.dp)  // Define o tamanho da imagem
+                            .align(Alignment.TopEnd)  // Alinha a imagem no canto superior direito
+                    )
+                }
 
                 Text(
-                    text = "Olá, Júlia",
+                    text = "Olá, Vinicius ",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     modifier = Modifier
-                        .offset(x = 280.dp, y = 110.dp)
+                        .offset(y = 60.dp)
+
                 )
 
             }
@@ -209,6 +205,13 @@ fun TelaHome() {
         Spacer(modifier = Modifier.height(4.dp))
 
 
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2)
+        ) {
+            
+        }
+
+
         // Especialidades
 //        LazyColumn {
 //            items(especialidades){
@@ -253,7 +256,7 @@ fun TelaHomePreview () {
 
     // Pre-visualizacao
     VitalTheme {
-        TelaHome()
+//        TelaHome(controleDeNavegacao)
     }
 
 

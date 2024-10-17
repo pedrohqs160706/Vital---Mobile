@@ -5,8 +5,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitFactory {
     // Variavel privada para guardar a url base
-    private val BASE_URL = ""
+    private val BASE_URL = "https://vital-umqy.onrender.com/v1/vital/"
 
+
+    // Arquivo para chamar a url base
 
     // Cliente retrofit - ele que faz as requisicoes
     private val retrofitFactory = Retrofit
@@ -15,14 +17,8 @@ class RetrofitFactory {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    fun getUserService(): UserService{
+    fun getUserService(): UserService {
         return retrofitFactory.create(UserService::class.java)
 
     }
-
-
-    // Vai gerar o objeto que tem as requisicoes
-//    fun getCharacterService(): CharacterService{
-//        return retrofitFactory.create(CharacterService::class.java)
-//    }
 }

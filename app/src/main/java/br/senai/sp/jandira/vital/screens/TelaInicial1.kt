@@ -10,6 +10,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -64,13 +70,25 @@ fun TelaInicial1(controleDeNavegacao: NavHostController) {
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopEnd) // Alinha no topo à direita
-                            .padding(20.dp) // Espaçamento
+
                     ) {
-                        Text(
-                            text = "Pular",
-                            color = Color.Gray,
-                            fontSize = 12.sp
-                        )
+                        Button(
+                            onClick = {
+                                controleDeNavegacao.navigate("telaLogin")
+                            },
+                            modifier = Modifier,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent  // Deixa o botão transparente
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(0.dp)  // Remove a elevação (sombra)
+                        ) {
+                            Text(
+                                text = "Pular",
+                                color = Color.Gray,
+                                fontSize = 12.sp
+                            )
+                        }
+
                     }
 
                     // Texto FINAIS
@@ -93,6 +111,34 @@ fun TelaInicial1(controleDeNavegacao: NavHostController) {
                             color = Color.White,
                             textAlign = TextAlign.Center
                         )
+
+                        Spacer(modifier = Modifier.height(14.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()  // Ocupa a largura total da tela
+                        ) {
+                            Button(
+                                onClick = {
+                                    controleDeNavegacao.navigate("telaInicial2")
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd),  // Alinha o botão à direita
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Transparent  // Deixa o botão transparente
+                                ),
+                                elevation = ButtonDefaults.buttonElevation(0.dp)  // Remove a elevação (sombra)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowForward,
+                                    contentDescription = "",
+                                    tint = Color.White  // Cor branca para o ícone
+                                )
+                            }
+                        }
+
+
+
 
                     }
                 }

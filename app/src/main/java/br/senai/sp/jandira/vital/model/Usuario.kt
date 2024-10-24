@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 
 data class Usuario(
-    val id: Int = 0,
     val nome: String = "",
     val email: String = "",
     val cpf: String = "",
@@ -13,3 +12,8 @@ data class Usuario(
     val data_nascimento: String = "",
     val isOver: Boolean = false
 )
+
+//data class RespostaCadastro(
+//    val status: String, // "success" ou "error"
+//    val mensagem: String // Mensagem de sucesso ou erro
+//)

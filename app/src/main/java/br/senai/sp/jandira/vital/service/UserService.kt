@@ -25,4 +25,5 @@ interface UserService {
     // Buscar pelo Email
     @GET("usuario/email")
     fun buscarPeloEmail(@Query("email") email: String): Call<Usuario?>
+
 }

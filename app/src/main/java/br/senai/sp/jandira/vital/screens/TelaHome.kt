@@ -205,44 +205,6 @@ fun TelaHome(nomeUsuario: String?) {
         Spacer(modifier = Modifier.height(4.dp))
 
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2)
-        ) {
-            
-        }
-
-
-        // Especialidades
-//        LazyColumn {
-//            items(especialidades){
-//                Card(
-//                    elevation = CardDefaults.cardElevation(6.dp),
-//                    colors = CardDefaults.cardColors(Color.White),
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(10.dp)
-//                ) {
-//                    Column (
-//                        modifier = Modifier
-//                            // Vai ter a largura do pai dela (Card)
-//                            .fillMaxSize()
-//                            .padding(4.dp)
-//                    ) {
-//
-//                        Image(
-//                            painter = if (it.imagem_url == null) painterResource(id = R.drawable.notimage) else it.imagem_url!!,
-//                            contentDescription = "",
-//                            contentScale = ContentScale.Crop
-//                        )
-//
-//                    }
-//
-//                }
-//            }
-//        }
-
-
-
 
     }
 
@@ -255,9 +217,9 @@ fun TelaHome(nomeUsuario: String?) {
 fun TelaHomePreview () {
 
     // Pre-visualizacao
-    VitalTheme {
-//        TelaHome(controleDeNavegacao)
-    }
+
+        TelaHome(nomeUsuario = "Inocente")
+
 
 
 }

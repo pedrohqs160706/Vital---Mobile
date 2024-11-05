@@ -1,7 +1,12 @@
 package br.senai.sp.jandira.vital.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -15,10 +20,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.vital.model.NavItem
 
@@ -41,34 +48,48 @@ fun TelaInicio(modifier: NavHostController){
         modifier = Modifier
             .fillMaxSize(),
         bottomBar = {
-            NavigationBar {
-                navItemList.forEachIndexed { index, navItem ->
-                    NavigationBarItem(
-                        selected = selectedIndex == index,
-                        onClick =
-                        {
-                            selectedIndex = index
-                        },
-                        icon = {
-                            Icon(imageVector = navItem.icon, contentDescription = "Icon" )
-                        },
-                        label = {
-                            Text(text = navItem.label)
-                        }
+            Box (
+                modifier = Modifier
+                    .background(color = Color.White, shape = RoundedCornerShape(16.dp))
+            ){
+                NavigationBar (
+                    containerColor = Color.Transparent,
+                ) {
 
-                    )
+                    navItemList.forEachIndexed { index, navItem ->
+                        NavigationBarItem(
+                            selected = selectedIndex == index,
+                            onClick =
+                            {
+                                selectedIndex = index
+                            },
+                            icon = {
+                                Icon(imageVector = navItem.icon, contentDescription = "Icon" )
+                            },
+                            label = {
+                                Text(text = navItem.label)
+                            }
+
+                        )
+                    }
                 }
             }
+
         }
     ){ innerPadding ->
         ContentScreen(
             modifier = Modifier
-            .padding(innerPadding)
-        )
+            .padding(innerPadding), selectedIndex)
     }
 }
 
+
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier) {
-    
+fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int) {
+ when(selectedIndex){
+
+     0-> TelaHome()
+     1-> TelaFavoritos()
+     2-> TelaAdicionarCartao()
+ }
 }

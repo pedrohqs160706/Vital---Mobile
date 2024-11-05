@@ -182,19 +182,26 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
                             Log.i("USUARIO", login.toString())
 
                             RetrofitFactory().getUserService().loginUsuario(login).enqueue(object : Callback<UsuarioLogin>{
-                                override fun onResponse(p0: Call<UsuarioLogin>, res: Response<UsuarioLogin>) {
-                                    Log.i("Response:", res.body().toString())
+                                override fun onResponse(call: Call<UsuarioLogin>, res: Response<UsuarioLogin>) {
                                     isLoading.value = false
-                                        var teste = res.body()!!
-                                      Log.i("RESPONSE", teste.toString())
-                                        if (res.body() != null) {
-                                            val usuario = res.body()!!
-                                            controleDeNavegacao.navigate("telaHome/${usuario.nome}")  // Navega para telaHome passando o nome
+
+                                    if (res.isSuccessful) {
+                                        val usuario = res.body()
+                                        if (usuario != null) {
+                                            Log.i("RESPONSE", usuario.toString())
+                                            val nomeUsuario = usuario.nome ?: ""
+                                            controleDeNavegacao.navigate("telaHome/$nomeUsuario")
                                         } else {
-                                            // Falha no login
+                                            // Handle the case where the body is null
                                             erroLoginState.value = true
                                             mensagemErroState.value = "Erro: credenciais inválidas."
+                                            Log.e("TelaLogin", "Response body is null")
                                         }
+                                    } else {
+                                        erroLoginState.value = true
+                                        mensagemErroState.value = "Erro: credenciais inválidas."
+                                        Log.e("TelaLogin", "Response not successful: ${res.code()}")
+                                    }
                                 }
                                 override fun onFailure(p0: Call<UsuarioLogin>, res: Throwable) {
                                     Log.i("Falhou:", res.toString())

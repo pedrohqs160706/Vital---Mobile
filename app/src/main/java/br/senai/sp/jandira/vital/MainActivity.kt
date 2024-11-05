@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(
                     navController = controleDeNavegacao,
                     // Quando eu abrir a aplicacao qual a tela que vai aparecer
-                    startDestination = "TelaInicial" // essa palavra login é criada, mas esta referente a tela que queremos
+                    startDestination = "TelaInicial1" // essa palavra login é criada, mas esta referente a tela que queremos
                 ) {
                     // Todas as telas tem que ficar aqui
                     composable(route = "telaInicial1") { TelaInicial1(controleDeNavegacao) }
@@ -43,13 +43,13 @@ class MainActivity : ComponentActivity() {
                     composable(route = "telaInicial2") { TelaInicial2(controleDeNavegacao) }
                     composable(route = "telaInicial3") { TelaInicial3(controleDeNavegacao) }
                     composable(route = "telaLogin") { TelaLogin(controleDeNavegacao) }
-                    composable(route = "telaHome") { TelaHome(controleDeNavegacao.toString()) }
+                    composable(route = "telaHome") { TelaInicio(controleDeNavegacao) }
                     composable(route = "telaAlterarSenha") { TelaAlterarSenha(controleDeNavegacao) }
 //                    composable(route = "telaCadastro") { TelaCadastro(controleDeNavegacao) }
-                    composable(route = "telaAdicionarCartao") { TelaAdicionarCartao(controleDeNavegacao) }
+                    composable(route = "telaAdicionarCartao") { TelaAdicionarCartao() }
                     composable("telaHome/{nome}") { backStackEntry ->
                         val nomeUsuario = backStackEntry.arguments?.getString("nome")
-                        TelaHome(nomeUsuario)
+                        TelaHome()
 
                     }
                 }

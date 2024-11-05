@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.vital.screens
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +36,19 @@ import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 
 
 @Composable
-fun TelaMetodosDePagamento() {
+fun MetodosDePagamento() {
+
+    var novasenhaState = remember {
+        mutableStateOf("")
+    }
+
+    var erroState = remember {
+        mutableStateOf(false)
+    }
+
+    var mensagemErroState = remember {
+        mutableStateOf("")
+    }
 
 
     VitalTheme {
@@ -82,7 +94,6 @@ fun TelaMetodosDePagamento() {
             Text(
                 "Selecione a forma de pagamento",
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .offset(y = -40.dp, x = -75.dp)
             )
@@ -92,18 +103,16 @@ fun TelaMetodosDePagamento() {
                 modifier = Modifier
                     .width(350.dp)
                     .height(45.dp)
-                    .background(
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(20.dp)
-                    )
+                    .shadow(2.dp, shape = RoundedCornerShape(12.dp))
                     .padding(top = 10.dp, start = 15.dp)
+
 
 
             ){
                 Row {
 
                     Image(
-                        painter = painterResource(R.drawable.perfil),
+                        painter = painterResource(R.drawable.dinheiro),
                         contentDescription = "",
                         modifier = Modifier
                             .width(20.dp)
@@ -125,17 +134,14 @@ fun TelaMetodosDePagamento() {
                 modifier = Modifier
                     .width(350.dp)
                     .height(45.dp)
-                    .background(
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(20.dp)
-                    )
+                    .shadow(2.dp, shape = RoundedCornerShape(12.dp))
                     .padding(top = 10.dp, start = 15.dp)
 
             ) {
                 Row {
 
                     Image(
-                        painter = painterResource(R.drawable.logo),
+                        painter = painterResource(R.drawable.cartao),
                         contentDescription = "",
                         modifier = Modifier
                             .width(20.dp)
@@ -230,12 +236,12 @@ fun TelaMetodosDePagamento() {
 
 @Preview (showBackground = true, showSystemUi = true)
 @Composable
-fun TelaMetodosDePagamentoPreview () {
+fun Preview () {
 
 
     // Pre-visualizacao
     VitalTheme {
-        TelaMetodosDePagamento()
+        MetodosDePagamento()
     }
 
 

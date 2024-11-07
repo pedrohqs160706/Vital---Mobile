@@ -51,6 +51,10 @@ android {
 
 dependencies {
 
+    // API da chamada de vídeo
+    implementation("org.jitsi.react:jitsi-meet-sdk:7.0.0") // Mantenha apenas esta linha
+
+    implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // Import da biblioteca ROOM
@@ -78,6 +82,9 @@ dependencies {
     implementation ("androidx.compose.ui:ui-tooling-preview:1.4.0")
     implementation ("androidx.navigation:navigation-compose:2.5.0")
 
+    //
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

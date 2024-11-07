@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.vital.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberBasicTooltipState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -38,13 +40,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.vital.R
 import br.senai.sp.jandira.vital.repository.CategoriaRepository
 import br.senai.sp.jandira.vital.repository.EspecialidadeRepository
+import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 
 
 @Composable
-fun TelaHome() {
+fun TelaHome(controleDeNavegacao: NavHostController) {
 
     // Criando variaves de estado
 
@@ -88,13 +93,16 @@ fun TelaHome() {
                     )
                 }
 
+                // Puxar o nome do usuario
                 Text(
-                    text = "Olá, Vinicius ",
+                    text = "Olá, Vinicius",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     modifier = Modifier
-                        .offset(y = 60.dp)
+                        .offset(y = 100.dp)
+                        .align(Alignment.End)
+                        .padding(10.dp)
 
                 )
 
@@ -118,16 +126,23 @@ fun TelaHome() {
         Spacer(modifier = Modifier.height(10.dp))
 
         LazyRow {
-            items(categoria){
+            items(categoria){ item ->
                 Card (
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(90.dp)
                         .width(140.dp)
                         .offset(x = 10.dp)
-                        .padding(horizontal = 6.dp),
+                        .padding(horizontal = 6.dp)
+                        .clickable {
+                            // Navegacao entre as categorias
+                            when (item.titulo) {
+                                "Telemedicina" -> controleDeNavegacao.navigate("telaTelemedicina")
+                                "Médicos" -> controleDeNavegacao.navigate("telaMedicos")
+                            }
+                        },
                     // Se o card estiver selecionado (true a cor dele vai ser mais escura)
-                    colors = if (it.selecionado==true) CardDefaults.cardColors(containerColor = Color(0xFF2954C7))
+                    colors = if (item.selecionado==true) CardDefaults.cardColors(containerColor = Color(0xFF2954C7))
                     // Se nao estiver selecionado a opacidade será menor
                     else CardDefaults.cardColors(containerColor = Color(0x802954C7))
                 ){
@@ -140,7 +155,8 @@ fun TelaHome() {
                     ) {
                         // Imagem de cada categoria
                         Image(
-                            painter = if (it.imagem==null) painterResource(id = R.drawable.notimage) else it.imagem!!,
+                            painter = if (item.imagem==null)
+                                painterResource(id = R.drawable.notimage) else item.imagem!!,
                             contentDescription = "",
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
@@ -148,7 +164,7 @@ fun TelaHome() {
                                 .height(45.dp)
                         )
                         Text(
-                            text = it.titulo,
+                            text = item.titulo,
                             color = Color.White,
                             fontSize = 14.sp
                         )
@@ -213,9 +229,11 @@ fun TelaHome() {
 @Composable
 fun TelaHomePreview () {
 
-    // Pre-visualizacao
 
-        TelaHome()
+    // Pre-visualizacao
+    VitalTheme {
+        TelaHome(rememberNavController())
+    }
 
 
 

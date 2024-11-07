@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.vital.screens.TelaAdicionarCartao
 import br.senai.sp.jandira.vital.screens.TelaAlterarSenha
+import br.senai.sp.jandira.vital.screens.TelaCadastro
 //import br.senai.sp.jandira.vital.screens.TelaCadastro
 import br.senai.sp.jandira.vital.screens.TelaHome
 import br.senai.sp.jandira.vital.screens.TelaInicial1
@@ -20,6 +21,8 @@ import br.senai.sp.jandira.vital.screens.TelaInicial2
 import br.senai.sp.jandira.vital.screens.TelaInicial3
 import br.senai.sp.jandira.vital.screens.TelaInicio
 import br.senai.sp.jandira.vital.screens.TelaLogin
+import br.senai.sp.jandira.vital.screens.TelaMedicos
+import br.senai.sp.jandira.vital.screens.TelaTelemedicina
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,15 +46,26 @@ class MainActivity : ComponentActivity() {
                     composable(route = "telaInicial2") { TelaInicial2(controleDeNavegacao) }
                     composable(route = "telaInicial3") { TelaInicial3(controleDeNavegacao) }
                     composable(route = "telaLogin") { TelaLogin(controleDeNavegacao) }
-                    composable(route = "telaHome") { TelaInicio(controleDeNavegacao) }
+                    composable(route = "telaCadastro") { TelaCadastro(controleDeNavegacao) }
+                    composable(route = "telaInicio") { TelaInicio(controleDeNavegacao) }
+                    composable(route = "telaHome") { TelaHome(controleDeNavegacao) }
+
+
+                    // Navegacao da Lazy Row - Tela Home
+                    composable(route = "telaTelemedicina") { TelaTelemedicina(controleDeNavegacao) }
+                    composable(route = "telaMedicos") { TelaMedicos(controleDeNavegacao) }
+
+
+
+
                     composable(route = "telaAlterarSenha") { TelaAlterarSenha(controleDeNavegacao) }
 //                    composable(route = "telaCadastro") { TelaCadastro(controleDeNavegacao) }
                     composable(route = "telaAdicionarCartao") { TelaAdicionarCartao() }
-                    composable("telaHome/{nome}") { backStackEntry ->
-                        val nomeUsuario = backStackEntry.arguments?.getString("nome")
-                        TelaHome()
+//                    composable("telaHome/{nome}") { backStackEntry ->
+//                        val nomeUsuario = backStackEntry.arguments?.getString("nome")
+//                        TelaHome()
 
-                    }
+
                 }
             }
         }

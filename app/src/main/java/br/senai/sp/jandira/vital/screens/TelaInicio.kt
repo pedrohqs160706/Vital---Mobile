@@ -1,8 +1,6 @@
 package br.senai.sp.jandira.vital.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,14 +21,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.vital.model.NavItem
 
 @Composable
-fun TelaInicio(modifier: NavHostController){
+fun TelaInicio(controleDeNavegacao: NavHostController){
 
 //    Criar a lista de Itens
     val navItemList = listOf(
@@ -79,16 +76,19 @@ fun TelaInicio(modifier: NavHostController){
     ){ innerPadding ->
         ContentScreen(
             modifier = Modifier
-            .padding(innerPadding), selectedIndex)
+            .padding(innerPadding),
+            selectedIndex = selectedIndex,
+            controleDeNavegacao = controleDeNavegacao
+        )
     }
 }
 
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int) {
+fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int, controleDeNavegacao: NavHostController) {
  when(selectedIndex){
 
-     0-> TelaHome()
+     0-> TelaHome(controleDeNavegacao)
      1-> TelaFavoritos()
      2-> TelaAdicionarCartao()
  }

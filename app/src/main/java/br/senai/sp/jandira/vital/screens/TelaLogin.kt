@@ -40,13 +40,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.vital.R
 import br.senai.sp.jandira.vital.model.Login
-import br.senai.sp.jandira.vital.model.Usuario
 import br.senai.sp.jandira.vital.model.UsuarioLogin
 import br.senai.sp.jandira.vital.service.RetrofitFactory
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
+import com.google.api.Context
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 
 @Composable
@@ -147,7 +148,7 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
                     }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
 
                 OutlinedTextField(
@@ -181,33 +182,39 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
                             val login = Login(email = emailState.value, senha = senhaState.value)
                             Log.i("USUARIO", login.toString())
 
-                            RetrofitFactory().getUserService().loginUsuario(login).enqueue(object : Callback<UsuarioLogin>{
-                                override fun onResponse(call: Call<UsuarioLogin>, res: Response<UsuarioLogin>) {
+                            RetrofitFactory().getUserService().loginUsuario(login).enqueue(object : Callback<UsuarioLogin> {
+                                override fun onResponse(call: Call<UsuarioLogin>, response: Response<UsuarioLogin>) {
                                     isLoading.value = false
 
-                                    if (res.isSuccessful) {
-                                        val usuario = res.body()
+                                    if (response.isSuccessful) {
+                                        val usuario = response.body()
                                         if (usuario != null) {
+                                            // Sucesso! O login foi realizado com sucesso.
                                             Log.i("RESPONSE", usuario.toString())
-                                            val nomeUsuario = usuario.nome ?: ""
-                                            controleDeNavegacao.navigate("telaHome/$nomeUsuario")
+
+                                            // Armazene o ID do usuário e o token
+                                            saveUserData(context, usuario.usuario_id, usuario.token)
+
+                                            // Navega para a TelaHome, passando o id do usuário ou token se necessário
+                                            controleDeNavegacao.navigate("telaInicio")
                                         } else {
-                                            // Handle the case where the body is null
                                             erroLoginState.value = true
                                             mensagemErroState.value = "Erro: credenciais inválidas."
-                                            Log.e("TelaLogin", "Response body is null")
+                                            Log.e("TelaLogin", "Corpo da resposta é nulo")
                                         }
                                     } else {
                                         erroLoginState.value = true
                                         mensagemErroState.value = "Erro: credenciais inválidas."
-                                        Log.e("TelaLogin", "Response not successful: ${res.code()}")
+                                        Log.e("TelaLogin", "Resposta não bem sucedida: ${response.code()}")
                                     }
                                 }
-                                override fun onFailure(p0: Call<UsuarioLogin>, res: Throwable) {
-                                    Log.i("Falhou:", res.toString())
+
+
+                                override fun onFailure(call: Call<UsuarioLogin>, t: Throwable) {
+                                    Log.i("Falhou:", t.toString())
                                     isLoading.value = false
-                                        erroLoginState.value = true
-                                        mensagemErroState.value = "Erro de conexão: ${res.message}"
+                                    erroLoginState.value = true
+                                    mensagemErroState.value = "Erro de conexão: ${t.message}"
                                 }
                             })
 
@@ -243,9 +250,6 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
                     fontWeight = FontWeight.Light
 
                 )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
                 Text(
                     text = "Cadastre-se Aqui",
                     fontSize = 16.sp,
@@ -270,6 +274,20 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
 
 }
 
+fun saveUserData(context: Context, userId: Int, token: String) {
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putInt("user_id", userId)
+    editor.putString("token", token)
+    editor.apply()
+}
+
+fun getUserData(context: Context): Pair<Int?, String?> {
+    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    val userId = sharedPreferences.getInt("user_id", -1)
+    val token = sharedPreferences.getString("token", null)
+    return if (userId != -1 && token != null) Pair(userId, token) else Pair(null, null)
+}
 @Preview (showBackground = true, showSystemUi = true)
 @Composable
 fun TelaLoginPreview () {

@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.vital.screens
 
 import TelaEspecialidadesFav
-import TelaMedicosFavoritos
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -40,14 +39,6 @@ fun TelaFavoritos(modifier: Modifier = Modifier) {
                 .height(200.dp)
                 .padding(top = 50.dp)
         ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "",
-                tint = Color(0xFFFFFFFF),
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 16.dp)
-            )
             Text(
                 "Favoritos",
                 color = Color.White,

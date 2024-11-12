@@ -10,6 +10,7 @@ data class Usuario(
     val id_sexo: Int = 0,
     val senha: String = "",
     val data_nascimento: String = "",
+    val foto: String,
     val isOver: Boolean = false
 )
 

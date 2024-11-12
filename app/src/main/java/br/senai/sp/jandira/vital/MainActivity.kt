@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(
                     navController = controleDeNavegacao,
                     // Quando eu abrir a aplicacao qual a tela que vai aparecer
-                    startDestination = "TelaInicial1" // essa palavra login é criada, mas esta referente a tela que queremos
+                    startDestination = "TelaTelemedicina" // essa palavra login é criada, mas esta referente a tela que queremos
                 ) {
                     // Todas as telas tem que ficar aqui
                     composable(route = "telaInicial1") { TelaInicial1(controleDeNavegacao) }

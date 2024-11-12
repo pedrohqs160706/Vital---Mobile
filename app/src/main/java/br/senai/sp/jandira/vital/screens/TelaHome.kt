@@ -44,7 +44,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.vital.R
 import br.senai.sp.jandira.vital.repository.CategoriaRepository
-import br.senai.sp.jandira.vital.repository.EspecialidadeRepository
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 
 
@@ -54,8 +53,6 @@ fun TelaHome(controleDeNavegacao: NavHostController) {
     // Criando variaves de estado
 
     val categoria = CategoriaRepository().mostrarTodasAsCategorias()
-
-    val especialidades = EspecialidadeRepository().listarTodasAsEspecialidades()
 
     var especialidadeState= remember {
         mutableStateOf("")

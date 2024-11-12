@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -43,13 +44,12 @@ import br.senai.sp.jandira.vital.model.Login
 import br.senai.sp.jandira.vital.model.UsuarioLogin
 import br.senai.sp.jandira.vital.service.RetrofitFactory
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
-import com.google.api.Context
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaLogin(controleDeNavegacao: NavHostController) {
 
@@ -192,8 +192,6 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
                                             // Sucesso! O login foi realizado com sucesso.
                                             Log.i("RESPONSE", usuario.toString())
 
-                                            // Armazene o ID do usuário e o token
-                                            saveUserData(context, usuario.usuario_id, usuario.token)
 
                                             // Navega para a TelaHome, passando o id do usuário ou token se necessário
                                             controleDeNavegacao.navigate("telaInicio")
@@ -274,20 +272,7 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
 
 }
 
-fun saveUserData(context: Context, userId: Int, token: String) {
-    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-    editor.putInt("user_id", userId)
-    editor.putString("token", token)
-    editor.apply()
-}
 
-fun getUserData(context: Context): Pair<Int?, String?> {
-    val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-    val userId = sharedPreferences.getInt("user_id", -1)
-    val token = sharedPreferences.getString("token", null)
-    return if (userId != -1 && token != null) Pair(userId, token) else Pair(null, null)
-}
 @Preview (showBackground = true, showSystemUi = true)
 @Composable
 fun TelaLoginPreview () {

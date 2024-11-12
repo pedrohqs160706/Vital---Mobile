@@ -22,6 +22,11 @@ class RetrofitFactory {
 
     }
 
+    // Vai gerar o objeto que tem as requisicoes
+    fun getEspecialidadeService(): EspecialidadeService{
+        return retrofitFactory.create(EspecialidadeService::class.java)
+    }
+
 }
 
 

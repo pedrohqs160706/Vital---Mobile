@@ -7,7 +7,7 @@ import retrofit2.http.GET
 
 interface EspecialidadeService {
 
-    // Funcao para listar todos os personagens
+    // Funcao para listar todas as especialidades
     @GET("especialidade")
     fun getAllEspecialidades(): Call<ResultEspecialidade>  // Esse call vai me devolver uma lista de personagens
 

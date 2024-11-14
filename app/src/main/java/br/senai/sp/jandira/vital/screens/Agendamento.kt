@@ -1,119 +1,53 @@
-package br.senai.sp.jandira.vital.screens
-
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.fontResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.senai.sp.jandira.vital.R
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
-import okhttp3.internal.wait
-
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.*
 
 @Composable
-fun Agendamento() {
+fun Agendamento(controleDeNavegacao: NavHostController) {
+    var indiceMesAtual by remember { mutableStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
+    var anoAtual by remember { mutableStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
+    var dataSelecionada by remember { mutableStateOf<Pair<String, Int>?>(null) }
 
+    val nomesDosMeses = listOf(
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    )
 
+    // Atualiza o calendário quando o mês é alterado
+    val diasNoMes = remember(indiceMesAtual, anoAtual) {
+        getDiasDoMes(indiceMesAtual, anoAtual)
+    }
 
     VitalTheme {
-
-
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color(0xffC6E1FF)),
             verticalArrangement = Arrangement.Bottom
         ) {
-
-            Text(
-                "Dr. Lara Silva Costa",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier
-                    .offset(y = 180.dp, x = 10.dp)
-            )
-
-            Text(
-                "Dermatologista",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Gray,
-                modifier = Modifier
-                    .offset(y = 183.dp, x = 10.dp)
-            )
-
-
-            Row {
-                Image(
-                    painter = painterResource(R.drawable.estrelaazul),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .width(16.dp)
-                        .height(16.dp)
-                        .offset(y = 197.dp, x = 10.dp)
-                )
-
-                Text(
-                    "4.8",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 12.sp,
-                    color = Color(0xff565454),
-                    modifier = Modifier
-                        .offset(y = 195.dp, x = 14.dp)
-                )
-
-                Text(
-                    "(388 avaliações)",
-                    fontWeight = FontWeight.Light,
-                    fontSize = 8.sp,
-                    color = Color(0xffA09C9C),
-                    modifier = Modifier
-                        .offset(y = 195.dp, x = 14.dp)
-                )
-            }
-
-            Image(
-                painter = painterResource(R.drawable.medica),
-                contentDescription = "",
-                modifier = Modifier
-                    .width(242.dp)
-                    .height(300.dp)
-                    .align(Alignment.End)
-            )
-
+            // Cabeçalho do calendário com seleção de mês e ano
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,534 +57,161 @@ fun Agendamento() {
                         shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)
                     )
                     .align(Alignment.CenterHorizontally)
-
-
             ) {
-
                 Text(
                     "Escolha o dia",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xff565454),
-                    modifier = Modifier
-                        .padding(start = 25.dp, top = 25.dp, bottom = 3.dp)
+                    modifier = Modifier.padding(start = 25.dp, top = 25.dp, bottom = 3.dp)
                 )
 
+                // Navegação do mês
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = {
+                            if (indiceMesAtual > 0) {
+                                indiceMesAtual--
+                            } else {
+                                indiceMesAtual = 11
+                                anoAtual--
+                            }
+                        }
+                    ) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Mês Anterior")
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                Row {
                     Text(
-                        "<",
-                        color = Color(0x50565454),
-                        modifier = Modifier
-                            .padding(start = 25.dp)
+                        text = "${nomesDosMeses[indiceMesAtual].uppercase()} $anoAtual",
+                        fontSize = 20.sp
                     )
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                    Text(
-                        "Agosto - 2024 >",
-                        fontSize = 10.sp,
-
-                        )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Row {
-
-                    Spacer(modifier = Modifier.width(42.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .width(45.dp)
-                            .height(47.dp)
-                            .background(color = Color(0xff0174DE), shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            "Hoje",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-
-                        Text(
-                            "20",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .width(45.dp)
-                            .height(47.dp)
-                            .background(color = Color(0xffBCBCBC), shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            "Qua",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-
-                        Text(
-                            "20",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .width(45.dp)
-                            .height(47.dp)
-                            .background(color = Color(0xffBCBCBC), shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            "Qui",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-
-                        Text(
-                            "20",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .width(45.dp)
-                            .height(47.dp)
-                            .background(color = Color(0xffBCBCBC), shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            "Sex",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-
-                        Text(
-                            "20",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .width(45.dp)
-                            .height(47.dp)
-                            .background(color = Color(0xffD9D9D9), shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            "Seg",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-
-                        Text(
-                            "20",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .width(45.dp)
-                            .height(47.dp)
-                            .background(color = Color(0xffBCBCBC), shape = RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            "Ter",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-
-                        Text(
-                            "20",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
+                    Button(onClick = {
+                        if (indiceMesAtual < 11) {
+                            indiceMesAtual++
+                        } else {
+                            indiceMesAtual = 0
+                            anoAtual++
+                        }
+                    }) {
+                        Icon(Icons.Default.ArrowForward, contentDescription = "Próximo Mês")
                     }
                 }
 
+                // Exibição dos dias do mês em layout rolável
                 Spacer(modifier = Modifier.height(20.dp))
-
-                Column (
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                ){
-
-                    Row (
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    ){
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "09:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .background(color = Color(0xff0174DE), shape = RoundedCornerShape(10.dp))
-
-                        ){
-
-                            Text(
-                                "10:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.White,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .background(color = Color(0xffE3E3E3), shape = RoundedCornerShape(10.dp))
-
-                        ){
-
-                            Text(
-                                "09:30 pm",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0x24565454),
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "09:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                    }
-
-                    Row (
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 10.dp)
-                    ){
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "09:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "10:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "09:30 pm",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "09:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                    }
-
-                    Row (
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(10.dp)
-                    ){
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "08:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "11:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .background(color = Color(0xffE3E3E3), shape = RoundedCornerShape(10.dp))
-
-                        ){
-
-                            Text(
-                                "09:30 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0x24565454),
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(7.dp))
-
-                        Box (
-                            modifier = Modifier
-                                .width(68.dp)
-                                .height(40.dp)
-                                .border(
-                                    width = 2.dp, // Largura da borda
-                                    color = Color(0xffBCBCBC), // Cor da borda
-                                    shape = RoundedCornerShape(10.dp) // A mesma forma da borda
-                                )
-
-                        ){
-
-                            Text(
-                                "12:00 am",
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(
-                    onClick = { /* Ação ao clicar no botão */ },
-                    modifier = Modifier
-                        .padding(16.dp) // Espaçamento ao redor do botão
-                        .height(43.dp) // Altura do botão
-                        .width(318.dp) // Largura do botão
-                        .align(Alignment.CenterHorizontally)
-                        .shadow(2.dp, shape = RoundedCornerShape(12.dp)), // Sombra com elevação de 8dp e cantos arredondados
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0174DE)), // Cor de fundo do botão
-                    shape = RoundedCornerShape(12.dp) // Cantos arredondados no botão
+                        .padding(horizontal = 16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    Text(
-                        text = "Ir para pagamento",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
+                    diasNoMes.chunked(4).forEach { semana ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            semana.forEach { (diaSemana, dia) ->
+                                DiaCard(
+                                    diaSemana = diaSemana,
+                                    dia = dia.toString(),
+                                    onClick = { dataSelecionada = diaSemana to dia }
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
 
+                // Exibição de horários disponíveis se uma data for selecionada
+                dataSelecionada?.let { (_, dia) ->
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Horários disponíveis para $dia",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
 
-
-
-
+                    val horarios = getHorariosDisponiveis(dia)
+                    horarios.chunked(4).forEach { linhaHorarios ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            linhaHorarios.forEach { horario ->
+                                HorarioCard(horario)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
             }
         }
     }
-
-
 }
 
+// Função para obter dias e respectivos dias da semana do mês atual em português
+fun getDiasDoMes(mes: Int, ano: Int): List<Pair<String, Int>> {
+    val dias = mutableListOf<Pair<String, Int>>()
+    val primeiroDiaDoMes = LocalDate.of(ano, mes + 1, 1)
+    val ultimoDia = primeiroDiaDoMes.lengthOfMonth()
 
-
-@Preview (showBackground = true, showSystemUi = true)
-@Composable
-fun AgendamentoPreview () {
-
-
-    // Pre-visualizacao
-    VitalTheme {
-        Agendamento()
+    for (dia in 1..ultimoDia) {
+        val data = LocalDate.of(ano, mes + 1, dia)
+        val diaSemana = data.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("pt", "BR"))
+        dias.add(diaSemana to dia)
     }
+    return dias
+}
 
+// Função para simular horários disponíveis para cada dia
+fun getHorariosDisponiveis(dia: Int): List<String> {
+    return listOf("09:00", "10:30", "13:00", "15:30", "17:00")
+}
 
+// Composable para exibir um card com o dia e dia da semana
+@Composable
+fun DiaCard(diaSemana: String, dia: String, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .width(60.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+            .padding(8.dp)
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = diaSemana, fontSize = 12.sp, color = Color.Gray)
+        Text(text = dia, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+    }
+}
 
+// Composable para exibir um card com o horário
+@Composable
+fun HorarioCard(horario: String) {
+    Box(
+        modifier = Modifier
+            .width(60.dp)
+            .background(color = Color(0xff0174DE), shape = RoundedCornerShape(10.dp))
+            .padding(vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = horario, fontSize = 12.sp, color = Color.White)
+    }
+}
 
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun AgendamentoPreview() {
+    VitalTheme {
+        Agendamento(rememberNavController())
+    }
 }

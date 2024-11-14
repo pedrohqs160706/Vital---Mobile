@@ -2,57 +2,43 @@ package br.senai.sp.jandira.vital.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.vital.R
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
-import okhttp3.internal.wait
 
 
 @Composable
-fun InfoMedico() {
+fun InfoMedico(controleDeNavegacao: NavHostController) {
 
 
 
     VitalTheme {
-
 
         Column (
             modifier = Modifier
@@ -328,51 +314,40 @@ fun InfoMedico() {
 
                     }
 
-//                    Button(
-//                        onClick = { /* Ação ao clicar no botão */ },
-//                        modifier = Modifier
-//                            .width(350.dp)
-//                            .padding(16.dp) // Espaçamento ao redor do botão
-//                            .height(43.dp) // Altura do botão
-//                            .align(Alignment.CenterHorizontally)
-//                            .offset(y = -40.dp)
-//                            .shadow(
-//                                2.dp,
-//                                shape = RoundedCornerShape(12.dp)
-//                            ), // Sombra com elevação de 8dp e cantos arredondados
-//                        colors = ButtonDefaults.buttonColors(
-//                            containerColor = Color(
-//                                0xFF0174DE
-//                            )
-//                        ), // Cor de fundo do botão
-//                        shape = RoundedCornerShape(12.dp) // Cantos arredondados no botão
-//                    ){
-//                        Text(
-//                            text = "Ir para pagamento",
-//                            fontSize = 14.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color.White
-//                        )
-//                    }
-
-                    Button(
-                        onClick = { /*TODO*/ },
+                    Column (
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(43.dp)
-                            .offset(-20.dp)
-                            .align(alignment = Alignment.CenterHorizontally)
-                            .padding(start = 40.dp)
+                            .padding(16.dp)
+                            .padding(top = 80.dp)
                     ) {
+                        Button(
+                            onClick = {
+                            /*TODO*/
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(43.dp)
+                                .align(alignment = Alignment.CenterHorizontally)
+                                .background(
+                                    color = Color(0xFF0174DE),
+                                    shape = RoundedCornerShape(15.dp)
+                                ),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent // Para garantir que o gradiente seja visível
+                            )
 
-                        Text(
-                            text = "Ir para pagamento",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
+                        ) {
 
+                            Text(
+                                text = "Selecione o dia e a hora",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+
+                        }
                     }
+
+
                 }
 
 
@@ -393,7 +368,7 @@ fun InfoMedicoPreview () {
 
     // Pre-visualizacao
     VitalTheme {
-        InfoMedico()
+        InfoMedico(rememberNavController())
     }
 
 

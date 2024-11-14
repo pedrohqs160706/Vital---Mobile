@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitFactory {
     // Variavel privada para guardar a url base
-    private val BASE_URL = "https://vital-umqy.onrender.com/v1/vital/"
+    private val BASE_URL = "https://vital-back-geh2haera4f5hzfb.brazilsouth-01.azurewebsites.net/v1/vital/"
 
 
     // Arquivo para chamar a url base
@@ -25,6 +25,17 @@ class RetrofitFactory {
     // Vai gerar o objeto que tem as requisicoes
     fun getEspecialidadeService(): EspecialidadeService{
         return retrofitFactory.create(EspecialidadeService::class.java)
+    }
+
+    // Medicos
+    fun getMedicoService(): MedicoService{
+        return  retrofitFactory.create(MedicoService::class.java)
+    }
+
+
+    // Consultas
+    fun getConsultaService(): ConsultaService{
+        return  retrofitFactory.create(ConsultaService::class.java)
     }
 
 }

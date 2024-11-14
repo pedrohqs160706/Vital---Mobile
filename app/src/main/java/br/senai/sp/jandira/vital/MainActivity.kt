@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.vital
 
+import Agendamento
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.senai.sp.jandira.vital.screens.InfoMedico
 import br.senai.sp.jandira.vital.screens.TelaAdicionarCartao
 import br.senai.sp.jandira.vital.screens.TelaAlterarSenha
 import br.senai.sp.jandira.vital.screens.TelaCadastro
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(
                     navController = controleDeNavegacao,
                     // Quando eu abrir a aplicacao qual a tela que vai aparecer
-                    startDestination = "TelaTelemedicina" // essa palavra login é criada, mas esta referente a tela que queremos
+                    startDestination = "telaMedicos" // essa palavra login é criada, mas esta referente a tela que queremos
                 ) {
                     // Todas as telas tem que ficar aqui
                     composable(route = "telaInicial1") { TelaInicial1(controleDeNavegacao) }
@@ -50,10 +52,18 @@ class MainActivity : ComponentActivity() {
                     composable(route = "telaInicio") { TelaInicio(controleDeNavegacao) }
                     composable(route = "telaHome") { TelaHome(controleDeNavegacao) }
 
+                    // Agendamento
+                    composable(route = "telaAgendamento") { Agendamento(controleDeNavegacao) }
+
+
+
+                    // Medicos
+                    composable(route = "telaInfoMedico") { InfoMedico(controleDeNavegacao) }
+                    composable(route = "telaMedicos") { TelaMedicos(controleDeNavegacao) }
+
 
                     // Navegacao da Lazy Row - Tela Home
                     composable(route = "telaTelemedicina") { TelaTelemedicina(controleDeNavegacao) }
-                    composable(route = "telaMedicos") { TelaMedicos(controleDeNavegacao) }
 
 
 

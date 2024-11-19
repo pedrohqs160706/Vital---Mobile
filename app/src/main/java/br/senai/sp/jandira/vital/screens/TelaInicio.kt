@@ -25,11 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.vital.model.NavItem
-
 @Composable
-fun TelaInicio(controleDeNavegacao: NavHostController){
+fun TelaInicio(controleDeNavegacao: NavHostController, idUsuario: Int) {
 
-//    Criar a lista de Itens
     val navItemList = listOf(
         NavItem("Ínicio", Icons.Default.Home),
         NavItem("Favoritos", Icons.Default.Star),
@@ -41,55 +39,49 @@ fun TelaInicio(controleDeNavegacao: NavHostController){
         mutableIntStateOf(0)
     }
 
-    Scaffold (
-        modifier = Modifier
-            .fillMaxSize(),
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            Box (
-                modifier = Modifier
-                    .background(color = Color.White, shape = RoundedCornerShape(16.dp))
-            ){
-                NavigationBar (
-                    containerColor = Color.Transparent,
-                ) {
-
+            Box(
+                modifier = Modifier.background(color = Color.White, shape = RoundedCornerShape(16.dp))
+            ) {
+                NavigationBar(containerColor = Color.Transparent) {
                     navItemList.forEachIndexed { index, navItem ->
                         NavigationBarItem(
                             selected = selectedIndex == index,
-                            onClick =
-                            {
+                            onClick = {
                                 selectedIndex = index
+                                if (index == 0) {
+                                    controleDeNavegacao.navigate("telaHome/$idUsuario")
+                                }
                             },
-                            icon = {
-                                Icon(imageVector = navItem.icon, contentDescription = "Icon" )
-                            },
-                            label = {
-                                Text(text = navItem.label)
-                            }
-
+                            icon = { Icon(imageVector = navItem.icon, contentDescription = "Icon") },
+                            label = { Text(text = navItem.label) }
                         )
                     }
                 }
             }
-
         }
-    ){ innerPadding ->
+    ) { innerPadding ->
         ContentScreen(
-            modifier = Modifier
-            .padding(innerPadding),
+            modifier = Modifier.padding(innerPadding),
             selectedIndex = selectedIndex,
-            controleDeNavegacao = controleDeNavegacao
+            controleDeNavegacao = controleDeNavegacao,
+            idUsuario = idUsuario
         )
     }
 }
 
-
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int, controleDeNavegacao: NavHostController) {
- when(selectedIndex){
-
-     0-> TelaHome(controleDeNavegacao)
-     1-> TelaFavoritos()
-     2-> TelaAdicionarCartao()
- }
+fun ContentScreen(
+    modifier: Modifier,
+    selectedIndex: Int,
+    controleDeNavegacao: NavHostController,
+    idUsuario: Int
+) {
+    when (selectedIndex) {
+        0 -> TelaHome(controleDeNavegacao, idUsuario)
+        1 -> TelaFavoritos()
+        2 -> TelaAdicionarCartao()
+    }
 }

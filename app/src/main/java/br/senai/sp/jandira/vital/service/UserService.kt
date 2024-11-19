@@ -6,10 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import br.senai.sp.jandira.vital.model.Usuario
 import br.senai.sp.jandira.vital.model.UsuarioLogin
+import br.senai.sp.jandira.vital.model.UsuarioResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface UserService {
 
@@ -27,5 +29,7 @@ interface UserService {
     fun buscarPeloEmail(@Query("email") email: String): Call<Usuario?>
 
     // Buscar pelo ID - result do usuario
+    @GET("usuario/{id}")
+    fun getUsuarioById(@Path("id") id: Int) : Call<UsuarioResponse>
 
 }

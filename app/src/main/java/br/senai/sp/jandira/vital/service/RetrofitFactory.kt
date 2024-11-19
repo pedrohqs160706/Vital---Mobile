@@ -38,6 +38,10 @@ class RetrofitFactory {
         return  retrofitFactory.create(ConsultaService::class.java)
     }
 
+    fun getUsuarioService(): UserService {
+ return retrofitFactory.create(UserService::class.java)
+    }
+
 }
 
 

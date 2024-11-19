@@ -113,7 +113,7 @@ fun TelaMedicos(controleDeNavegacao: NavHostController) {
                         .align(Alignment.CenterStart) // Alinha à esquerda, centralizado verticalmente
                         .padding(start = 16.dp) // Adiciona um espaçamento à esquerda
                         .clickable{
-                            controleDeNavegacao.navigate("telaHome")
+                            controleDeNavegacao.navigate("telaInicio")
                         }
                 )
                 Text(

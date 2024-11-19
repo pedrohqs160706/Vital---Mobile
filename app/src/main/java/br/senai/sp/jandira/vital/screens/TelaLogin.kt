@@ -190,11 +190,10 @@ fun TelaLogin(controleDeNavegacao: NavHostController) {
                                         val usuario = response.body()
                                         if (usuario != null) {
                                             // Sucesso! O login foi realizado com sucesso.
-                                            Log.i("RESPONSE", usuario.toString())
-
-
+                                            Log.d("NAVEGACAO", "Nome do usuário: ${usuario.nome}")
                                             // Navega para a TelaHome, passando o id do usuário ou token se necessário
-                                            controleDeNavegacao.navigate("telaInicio")
+                                            val idUsuario = usuario.id_usuario ?: 0
+                                            controleDeNavegacao.navigate("telaInicio/$idUsuario")
                                         } else {
                                             erroLoginState.value = true
                                             mensagemErroState.value = "Erro: credenciais inválidas."

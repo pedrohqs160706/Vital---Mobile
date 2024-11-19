@@ -9,9 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import br.senai.sp.jandira.vital.screens.InfoMedico
 import br.senai.sp.jandira.vital.screens.TelaAdicionarCartao
 import br.senai.sp.jandira.vital.screens.TelaAlterarSenha
@@ -24,6 +26,7 @@ import br.senai.sp.jandira.vital.screens.TelaInicial3
 import br.senai.sp.jandira.vital.screens.TelaInicio
 import br.senai.sp.jandira.vital.screens.TelaLogin
 import br.senai.sp.jandira.vital.screens.TelaMedicos
+import br.senai.sp.jandira.vital.screens.TelaPerfil
 import br.senai.sp.jandira.vital.screens.TelaTelemedicina
 import br.senai.sp.jandira.vital.ui.theme.VitalTheme
 
@@ -40,17 +43,40 @@ class MainActivity : ComponentActivity() {
                 NavHost(
                     navController = controleDeNavegacao,
                     // Quando eu abrir a aplicacao qual a tela que vai aparecer
-                    startDestination = "telaMedicos" // essa palavra login é criada, mas esta referente a tela que queremos
+                    startDestination = "telaInicial1" // essa palavra login é criada, mas esta referente a tela que queremos
                 ) {
                     // Todas as telas tem que ficar aqui
                     composable(route = "telaInicial1") { TelaInicial1(controleDeNavegacao) }
-                    composable(route = "telaInicial") { TelaInicio(controleDeNavegacao) }
+
                     composable(route = "telaInicial2") { TelaInicial2(controleDeNavegacao) }
                     composable(route = "telaInicial3") { TelaInicial3(controleDeNavegacao) }
                     composable(route = "telaLogin") { TelaLogin(controleDeNavegacao) }
                     composable(route = "telaCadastro") { TelaCadastro(controleDeNavegacao) }
-                    composable(route = "telaInicio") { TelaInicio(controleDeNavegacao) }
-                    composable(route = "telaHome") { TelaHome(controleDeNavegacao) }
+
+//                    composable(route = "telaPerfil") { TelaPerfil(controleDeNavegacao) }
+
+
+
+
+
+                    composable(
+                        route = "telaHome/{idUsuario}",
+                        arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val idUsuario = backStackEntry.arguments?.getInt("idUsuario") ?: 0
+                        TelaHome(controleDeNavegacao, idUsuario)
+                    }
+
+                    composable(
+                        route = "telaInicio/{idUsuario}",
+                        arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val idUsuario = backStackEntry.arguments?.getInt("idUsuario") ?: 0
+                        TelaInicio(controleDeNavegacao, idUsuario)
+                    }
+
+
+
 
                     // Agendamento
                     composable(route = "telaAgendamento") { Agendamento(controleDeNavegacao) }
